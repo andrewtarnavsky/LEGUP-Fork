@@ -43,9 +43,14 @@ public class TooFewTentsContradictionRuleTest {
     }
 
     /**
-     * @throws InvalidFileFormatException Using a 1x1 Puzzle Grid, which is just a tent, checks if
-     *     the fact it expects 2 tents on the y-axis is caught. (This is an impossible situation
-     *     given the constraints, but for the purposes of the test it is fine)
+     * 3x3 Board
+     * [ U | T | U ] 0
+     * [ U | t | U ] 0
+     * [ U | G | U ] 0
+     *   0   2   0
+     * Contradiction occurs in second column
+     * 
+     * @throws InvalidFileFormatException 
      */
     @Test
     public void TooFewTentsContradictionRule_WithTent() throws InvalidFileFormatException {
@@ -58,7 +63,21 @@ public class TooFewTentsContradictionRuleTest {
 
         TreeTentBoard board = (TreeTentBoard) transition.getBoard();
         Assert.assertNull(RULE.checkContradiction(board));
-        Assert.assertNull(RULE.checkRuleAt(transition, board.getCell(0, 0)));
+
+        TreeTentCell tree = board.getCell(1, 0);
+        TreeTentCell tent = board.getCell(1, 1);
+        TreeTentCell grass = board.getCell(1, 2);
+
+        for (int i = 0; i < board.getWidth(); i++) {
+            for (int j = 0; j < board.getHeight(); j++) {
+                Point point = new Point(i,j);
+                if (point.equals(tree.getLocation()) || point.equals(tent.getLocation()) || point.equals(grass.getLocation())) {
+                    Assert.assertNull(RULE.checkRuleAt(transition, board.getCell(i, j)));
+                } else {
+                    Assert.assertNotNull(RULE.checkRuleAt(transition, board.getCell(i, j)));
+                }
+            }
+        }
     }
 
     /**
@@ -147,7 +166,8 @@ public class TooFewTentsContradictionRuleTest {
      * [ G | T ] 1
      * [ U | G ] 0
      *   0 | 1
-     * Contradiction should apply to first row and second column
+     * Contradictions occur in the first row and second column
+     * 
      * @throws InvalidFileFormatException
      */
     public void TooFewTentsContradictionRule_2x2RowAndColumn() throws InvalidFileFormatException {
