@@ -171,7 +171,30 @@ public class TooFewTentsContradictionRuleTest {
      * @throws InvalidFileFormatException
      */
     public void TooFewTentsContradictionRule_2x2RowAndColumn() throws InvalidFileFormatException {
+        TestUtilities.importTestBoard(
+                "puzzles/treetent/rules/TooFewTentsContradictionRule/TooFewTents2x2ColumnAndRow", treetent);
+        TreeNode rootNode = treetent.getTree().getRootNode();
+        TreeTransition transition = rootNode.getChildren().get(0);
+        transition.setRule(RULE);
 
+        TreeTentBoard board = (TreeTentBoard) transition.getBoard();
+
+        Assert.assertNull(RULE.checkContradiction(board));
+
+        TreeTentCell tree = board.getCell(1, 0);
+        TreeTentCell grass1 = board.getCell(0, 0);
+        TreeTentCell grass2 = board.getCell(1, 1);
+
+        for (int i = 0; i < board.getWidth(); i++) {
+            for (int j = 0; j < board.getHeight(); j++) {
+                Point point = new Point(i,j);
+                if (point.equals(tree.getLocation()) || point.equals(grass1.getLocation()) || point.equals(grass2.getLocation())) {
+                    Assert.assertNull(RULE.checkRuleAt(transition, board.getCell(i, j)));
+                } else {
+                    Assert.assertNotNull(RULE.checkRuleAt(transition, board.getCell(i, j)));
+                }
+            }
+        }
     }
 
     /**
