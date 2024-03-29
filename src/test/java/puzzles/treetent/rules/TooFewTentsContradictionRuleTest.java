@@ -143,6 +143,18 @@ public class TooFewTentsContradictionRuleTest {
     }
 
     /**
+     * 2x2 Board
+     * [ G | T ] 1
+     * [ U | G ] 0
+     *   0 | 1
+     * Contradiction should apply to first row and second column
+     * @throws InvalidFileFormatException
+     */
+    public void TooFewTentsContradictionRule_2x2RowAndColumn() throws InvalidFileFormatException {
+
+    }
+
+    /**
      * @throws InvalidFileFormatException Looks at a 3x3 Board in the format: [] Tr [] [] Gr [] []
      *     Gr [] Column 2 is checked to have 1 Tent (which is not present, thus producing a
      *     contradiction)
