@@ -265,4 +265,28 @@ public class TooManyTentsContradictionRuleTest {
             }
         }
     }
+
+    /**
+     * Tests TooManyTents where there is no contradiction
+     * Row Tent Counts: 1,0,1 Column Tent Counts: 0,1,1
+     * @throws InvalidFileFormatException
+     */
+    public void TooManyTentsContradictionRule_NoContradiction() throws InvalidFileFormatException {
+        TestUtilities.importTestBoard(
+                "puzzles/treetent/rules/TooManyTentsContradictionRule/TooManyTentsNoContradiction",
+                treetent);
+        TreeNode rootNode = treetent.getTree().getRootNode();
+        TreeTransition transition = rootNode.getChildren().get(0);
+        transition.setRule(RULE);
+
+        TreeTentBoard board = (TreeTentBoard) transition.getBoard();
+
+        Assert.assertNotNull(RULE.checkContradiction(board));
+
+        for (int i = 0; i < board.getHeight(); i++) {
+            for (int k = 0; k < board.getWidth(); k++) {
+                Assert.assertNotNull(RULE.checkRuleAt(transition, board.getCell(k, i)));
+            }
+        }
+    }
 }
