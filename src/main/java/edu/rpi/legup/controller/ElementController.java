@@ -140,6 +140,7 @@ public class ElementController
         System.out.printf(
                 "selected Element is NOT null, attempting to change board at (%d, %d)\n",
                 scaledPoint.x, scaledPoint.y);
+
         //            System.out.println("Before: " + b.getCell(scaledPoint.x,
         // scaledPoint.y).getData());
         b.setCell(scaledPoint.x, scaledPoint.y, this.selectedElement, e);

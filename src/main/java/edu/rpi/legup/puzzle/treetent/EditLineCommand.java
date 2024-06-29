@@ -122,7 +122,10 @@ public class EditLineCommand extends PuzzleCommand {
                         (TreeTentCell) end.getPuzzleElement());
         for (TreeTentLine l : board.getLines()) {
             if (line.compare(l) && !l.isModifiable()) {
-                return CommandError.UNMODIFIABLE_DATA.toString();
+                l.setModifiable(false);;
+                if(!l.isModifiable()) {
+                    return CommandError.UNMODIFIABLE_DATA.toString();
+                }
             }
         }
 

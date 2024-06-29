@@ -114,7 +114,12 @@ public class EditDataCommand extends PuzzleCommand {
                 return CommandError.UNMODIFIABLE_BOARD.toString();
             } else {
                 if (!board.getPuzzleElement(selectedPuzzleElement).isModifiable()) {
-                    return CommandError.UNMODIFIABLE_DATA.toString();
+
+                    selectedPuzzleElement.setModifiable(false);
+
+                    if(!board.getPuzzleElement(selectedPuzzleElement).isModifiable()) {
+                        return "BYE\n";//CommandError.UNMODIFIABLE_DATA.toString();
+                    }
                 }
             }
         } else {
@@ -123,7 +128,11 @@ public class EditDataCommand extends PuzzleCommand {
                 return CommandError.UNMODIFIABLE_BOARD.toString();
             } else {
                 if (!board.getPuzzleElement(selectedPuzzleElement).isModifiable()) {
-                    return CommandError.UNMODIFIABLE_DATA.toString();
+                    selectedPuzzleElement.setModifiable(false);
+
+                    if(!board.getPuzzleElement(selectedPuzzleElement).isModifiable()) {
+                        return CommandError.UNMODIFIABLE_DATA.toString();
+                    }
                 }
             }
         }

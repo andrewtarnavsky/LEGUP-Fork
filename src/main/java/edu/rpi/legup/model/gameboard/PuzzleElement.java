@@ -70,7 +70,12 @@ public abstract class PuzzleElement<T> {
      * @param isModifiable true if this puzzle element is modifiable, false otherwise
      */
     public void setModifiable(boolean isModifiable) {
-        this.isModifiable = isModifiable;
+        if(this.data.equals(0)){
+            this.isModifiable = true;
+        }
+        else {
+            this.isModifiable = isModifiable;
+        }
     }
 
     /**

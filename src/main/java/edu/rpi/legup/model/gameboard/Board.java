@@ -68,7 +68,9 @@ public abstract class Board {
      * @return puzzle elements on the board
      */
     public List<PuzzleElement> getPuzzleElements() {
-        return puzzleElements;
+        List<PuzzleElement> puzzleCopy = new ArrayList<>();
+        puzzleCopy.addAll(puzzleElements);
+        return puzzleCopy;
     }
 
     /**
@@ -95,6 +97,7 @@ public abstract class Board {
      * @param isModifiable true if the board is modifiable, false otherwise
      */
     public void setModifiable(boolean isModifiable) {
+        //println("HEY, THE MODIFIABLILITY OF AN ELEMENT IS CHANGING");
         this.isModifiable = isModifiable;
     }
 
