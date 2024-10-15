@@ -1,0 +1,36 @@
+Direct Rule Tests
+Empty Cells in Light - LTUP-BASC-0001
+Test Case 1 - Empty Cell in Light Direct Rule:
+
+EmptyCells
+Checks that the rule correctly detects empty cells in light (yellow tiles), and doesn't erroneously detect black cells, lightbulbs, or unlit empty cells as empty cells in light.
+Empty Corners - LTUP-BASC-0002
+Test Case 1 - Empty Corners Test:
+
+EmptyCorners
+Checks that adding empty cell marks to (2,2), (0,2), and (4,3) does correctly satisfy the empty corners rule.
+Checks that adding an empty cell mark to (4,5) does not get accepted as satisfying the rule, as it is skipping steps.
+Checks that adding an empty cell mark to (4,1) does not falsely trigger the empty corners rule.
+Finish with Bulbs - LTUP-BASC-0003
+Test Case 1 - Finish Bulb Test:
+
+FinishWithBulbs
+TODO: HERE
+Test Case 2 - Finish Bulb Test with Three:
+
+FinishWithBulbsWithThree
+TODO: HERE
+Finish with Empty - LTUP-BASC-0004
+Test Case 1 - Finish Empty Test with One:
+
+FinishEmptyWithOne
+TODO: HERE
+Test Case 2 - Finish Empty Test with Three:
+
+FinishEmptyWithThree
+TODO: HERE
+Must Light - LTUP-BASC-0005
+Test Case 1 - Must Light Test:
+
+MustLight
+TODO: HERE
