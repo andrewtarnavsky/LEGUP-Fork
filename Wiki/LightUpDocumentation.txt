@@ -76,19 +76,19 @@ Too Few Bulbs - LTUP-CONT-0003
 
 Test Case 1 - Full Too Few Test:
 
-TODO: HERE
+Checks that the rule correctly detects that (1,1), (4,1), and (1,4) do not have sufficient bulbs surrounding the black tiles
 
 Test Case 2 - Too Few Simple Test:
 
-TODO: HERE
+Checks that the rule correctly detects that the center square (1,1) is impossible to satisfy
 
 Test Case 1 - Full Too Many Test:
 
-TODO: HERE
+Checks that the rule correctly detects that (1,1) and (1,4) have too many bulbs surrounding the black tiles
 
 Test Case 2 - Too Many Simple Test:
 
-TODO: HERE
+Checks that the rule correctly detects that (1,1) has too many bulbs surrounding the black tiles
 
 Case Rule Tests
 
@@ -96,14 +96,14 @@ Light or Empty - LTUP-CASE-0001
 
 Test Case 1 - Light Or Empty Test:
 
-TODO: HERE
+Verifies that the getCases function of the LightOrEmptyCaseRule class correctly generates the expected number of possible board configurations (two cases in this example).
 
 Satisfy Number - LTUP-CASE-0002
 
 Test Case 1 - Satisfy Number Test:
 
-TODO: HERE
+Verifies that the case rule correctly generates all valid board configurations for a specific numbered cell in the Light Up puzzle, ensuring that the expected number of cases (2) is produced.
 
 Test Case 2 - Satisfy Number Test Two:
 
-TODO: HERE
+Verifies that the case rule generates the correct number of valid board configurations (6) for the specific numbered cell above.
