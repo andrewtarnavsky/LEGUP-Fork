@@ -2,42 +2,44 @@ Direct Rule Tests
 Empty Cells in Light - LTUP-BASC-0001
 Test Case 1 - Empty Cell in Light Direct Rule:
 
-EmptyCells
 Checks that the rule correctly detects empty cells in light (yellow tiles), and doesn't erroneously detect black cells, lightbulbs, or unlit empty cells as empty cells in light.
+
 Empty Corners - LTUP-BASC-0002
 Test Case 1 - Empty Corners Test:
 
-EmptyCorners
 Checks that adding empty cell marks to (2,2), (0,2), and (4,3) does correctly satisfy the empty corners rule.
 Checks that adding an empty cell mark to (4,5) does not get accepted as satisfying the rule, as it is skipping steps.
 Checks that adding an empty cell mark to (4,1) does not falsely trigger the empty corners rule.
+
 Finish with Bulbs - LTUP-BASC-0003
 Test Case 1 - Finish Bulb Test:
 
-FinishWithBulbs
-TODO: HERE
+Verifies that the rule is logically followed by checking that the rule is satisfied at the specific cell (1,0), while confirming that the rule fails at all other cells, except for the one logically connected to the rule.
+
 Test Case 2 - Finish Bulb Test with Three:
 
-FinishWithBulbsWithThree
-TODO: HERE
+Verifies that the rule logically holds when three bulbs are placed at specific cells (1,2), (0,1), and (2,1), while ensuring that other cells do not satisfy the rule.
+
 Finish with Empty - LTUP-BASC-0004
+
 Test Case 1 - Finish Empty Test with One:
 
-FinishEmptyWithOne
-TODO: HERE
+Verifies that the rule logically holds when three cells adjacent to a "1" clue (located at (1,1)) are set to empty, ensuring other cells do not satisfy the rule.
+
 Test Case 2 - Finish Empty Test with Three:
 
-FinishEmptyWithThree
-TODO: HERE
+Verifies that the rule logically holds when one cell above a "3" clue (located at (1,1)) is set to empty, ensuring other cells follow the rule and other unrelated cells do not.
+
 Must Light - LTUP-BASC-0005
+
 Test Case 1 - Must Light Test:
 
-MustLight
-TODO: HERE
+Ensures that the rule logically holds when a bulb is placed at (1,2), and verifies that no other cell in the image follows the rule.
 
 Contradiction Rule Tests
 
 Bulbs In Path - LTUP-CONT-0001
+
 Test Case 1 - Light in Horizontal Path:
 
 TODO: HERE
