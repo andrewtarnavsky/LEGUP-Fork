@@ -42,33 +42,35 @@ Bulbs In Path - LTUP-CONT-0001
 
 Test Case 1 - Light in Horizontal Path:
 
-TODO: HERE
+Checks that the rule correctly detects overlapping light paths, when lights are placed on the same horizontal level without any blocks between them
 
 Test Case 2 - Light in Vertical Path:
 
-TODO: HERE
+Checks that the rule correctly detects overlapping light paths, when lights are placed on the same vertical level without any blocks between them
+
 
 Test Case 3 - Block in Horizontal Path:
 
-TODO: HERE
+Checks that the rule doesn't erroneously detect overlapping light paths, when lights are placed on the same horizontal level with a block placed between them
 
 Test Case 4 - Vertical Black Between Regions:
 
-TODO: HERE
+Checks that the rule doesn't erroneously detect overlapping light paths, when lights are placed on the same vertical level with a block placed between them
 
 Cannot Light A Cell - LTUP-CONT-0002
 
 Test Case 1 - Full Light Test:
 
-TODO: HERE
+Checks that the rule correctly detects that (1,3) and (3,3) are unable to be lit
+Checks that the rule doesn't erroneously detect (0,0), (1,1), (1,0), and (3,2) as unable to be lit
 
 Test Case 2 - Cannot Light Test:
 
-TODO: HERE
+Checks that the rule correctly detects that (1,1) is unable to be lit
 
 Test Case 3 - Can Light Test:
 
-TODO: HERE
+Checks that the rule doesn't erroneously detect a contradiction on the board
 
 Too Few Bulbs - LTUP-CONT-0003
 
