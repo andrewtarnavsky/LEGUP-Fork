@@ -9,73 +9,70 @@ public class YinYangController extends ElementController {
 
     @Override
     public void changeCell(MouseEvent e, PuzzleElement data) {
-        // Ensure the data is cast to YinYangCell
-        if (!(data instanceof YinYangCell)) {
+        if (!(data instanceof YinYangCell cell)) {
             throw new IllegalArgumentException("Invalid cell type");
         }
-        YinYangCell cell = (YinYangCell) data;
 
         YinYangBoard board = (YinYangBoard) this.boardView.getBoard();
+        int button = e.getButton();
+        boolean isControlPressed = e.isControlDown();
 
-        if (e.getButton() == MouseEvent.BUTTON1) { // Left mouse button
-            if (e.isControlDown()) {
-                this.boardView
-                        .getSelectionPopupMenu()
-                        .show(
-                                boardView,
-                                this.boardView.getCanvas().getX() + e.getX(),
-                                this.boardView.getCanvas().getY() + e.getY());
+        if (button == MouseEvent.BUTTON1) { // Left click
+            if (isControlPressed) {
+                showSelectionPopup(e);
             } else {
-                // Cycle cell type: UNKNOWN -> WHITE -> BLACK, respecting rules
-                if (cell.getType() == YinYangType.UNKNOWN) {
-                    if (canSetType(board, cell, YinYangType.WHITE)) {
-                        cell.setType(YinYangType.WHITE);
-                    }
-                } else if (cell.getType() == YinYangType.WHITE) {
-                    if (canSetType(board, cell, YinYangType.BLACK)) {
-                        cell.setType(YinYangType.BLACK);
-                    }
-                } else {
-                    cell.setType(YinYangType.UNKNOWN);
-                }
+                cycleCellType(board, cell, true);
             }
-        } else if (e.getButton() == MouseEvent.BUTTON3) { // Right mouse button
-            // Reverse the cycle: UNKNOWN <- WHITE <- BLACK, respecting rules
-            if (cell.getType() == YinYangType.UNKNOWN) {
-                if (canSetType(board, cell, YinYangType.BLACK)) {
-                    cell.setType(YinYangType.BLACK);
-                }
-            } else if (cell.getType() == YinYangType.BLACK) {
-                if (canSetType(board, cell, YinYangType.WHITE)) {
-                    cell.setType(YinYangType.WHITE);
-                }
-            } else {
-                cell.setType(YinYangType.UNKNOWN);
-            }
+        } else if (button == MouseEvent.BUTTON3) { // Right click
+            cycleCellType(board, cell, false);
         }
-        this.boardView.repaint(); // Refresh the view after changes
+        this.boardView.repaint();
     }
 
     /**
-     * Validates whether a cell can be set to the specified type without breaking rules.
+     * Displays the selection popup menu at the mouse event location.
+     */
+    private void showSelectionPopup(MouseEvent e) {
+        this.boardView.getSelectionPopupMenu().show(
+                boardView,
+                this.boardView.getCanvas().getX() + e.getX(),
+                this.boardView.getCanvas().getY() + e.getY()
+        );
+    }
+
+    /**
+     * Cycles the cell type forward or backward, ensuring rule compliance.
      *
-     * @param board The board on which the change is being made
-     * @param cell  The cell to be changed
-     * @param type  The type to set
-     * @return true if the change is valid, false otherwise
+     * @param board    The YinYang board.
+     * @param cell     The cell to be changed.
+     * @param forward  If true, cycles forward; if false, cycles backward.
+     */
+    private void cycleCellType(YinYangBoard board, YinYangCell cell, boolean forward) {
+        YinYangType nextType = switch (cell.getType()) {
+            case UNKNOWN -> forward ? YinYangType.WHITE : YinYangType.BLACK;
+            case WHITE -> forward ? YinYangType.BLACK : YinYangType.UNKNOWN;
+            case BLACK -> forward ? YinYangType.UNKNOWN : YinYangType.WHITE;
+        };
+
+        if (canSetType(board, cell, nextType)) {
+            cell.setType(nextType);
+        }
+    }
+
+    /**
+     * Checks if setting a cell to a specific type is valid according to the game rules.
+     *
+     * @param board The game board.
+     * @param cell  The cell being modified.
+     * @param type  The proposed type change.
+     * @return True if the change is valid, false otherwise.
      */
     private boolean canSetType(YinYangBoard board, YinYangCell cell, YinYangType type) {
-        // Temporarily set the cell type to validate the board state
         YinYangType originalType = cell.getType();
         cell.setType(type);
-
-        // Validate rules
         boolean isValid = YinYangUtilities.validateNo2x2Blocks(board) &&
                 YinYangUtilities.validateConnectivity(board);
-
-        // Revert the cell type to its original state
         cell.setType(originalType);
-
         return isValid;
     }
 }
