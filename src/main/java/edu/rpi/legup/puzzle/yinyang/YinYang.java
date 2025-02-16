@@ -22,10 +22,8 @@ public class YinYang extends Puzzle {
 
     @Override
     public Board generatePuzzle(int difficulty) {
-        // Generate a new puzzle with some initial setup
         YinYangBoard board = new YinYangBoard(difficulty, difficulty);
 
-        // Example: Pre-fill some cells for a starting puzzle configuration
         board.setCell(0, 0, new YinYangCell(YinYangType.WHITE, 0, 0));
         board.setCell(difficulty - 1, difficulty - 1, new YinYangCell(YinYangType.BLACK, difficulty - 1, difficulty - 1));
 
@@ -34,7 +32,6 @@ public class YinYang extends Puzzle {
 
     @Override
     public boolean isValidDimensions(int rows, int columns) {
-        // Validation: Dimensions must be at least 2x2 and a square for simplicity
         return rows >= 2 && columns >= 2 && rows == columns;
     }
 
@@ -42,23 +39,20 @@ public class YinYang extends Puzzle {
     public boolean isBoardComplete(Board board) {
         YinYangBoard yinYangBoard = (YinYangBoard) board;
 
-        // Check if all cells are filled
-        for (var element : yinYangBoard.getPuzzleElements()) {
-            YinYangCell cell = (YinYangCell) element;
-            if (cell.getType() == YinYangType.UNKNOWN) {
-                return false;
-            }
+        if (yinYangBoard.getPuzzleElements().stream()
+                .map(e -> (YinYangCell) e)
+                .anyMatch(cell -> cell.getType() == YinYangType.UNKNOWN)) {
+            return false;
         }
 
-        // Check that all rules are satisfied
         return YinYangUtilities.validateNo2x2Blocks(yinYangBoard) &&
                 YinYangUtilities.validateConnectivity(yinYangBoard);
     }
 
     @Override
     public void onBoardChange(Board board) {
-        // Example: Revalidate the board when changes occur
         YinYangBoard yinYangBoard = (YinYangBoard) board;
+
         if (!YinYangUtilities.validateNo2x2Blocks(yinYangBoard)) {
             System.out.println("Warning: Board contains invalid 2x2 blocks.");
         }
