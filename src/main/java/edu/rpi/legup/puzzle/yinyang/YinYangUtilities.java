@@ -14,15 +14,12 @@ public class YinYangUtilities {
     public static boolean validateNo2x2Blocks(YinYangBoard board) {
         for (int x = 0; x < board.getWidth() - 1; x++) {
             for (int y = 0; y < board.getHeight() - 1; y++) {
-                YinYangCell c1 = board.getCell(x, y);
-                YinYangCell c2 = board.getCell(x + 1, y);
-                YinYangCell c3 = board.getCell(x, y + 1);
-                YinYangCell c4 = board.getCell(x + 1, y + 1);
-
-                if (c1.getType() == c2.getType() &&
-                        c2.getType() == c3.getType() &&
-                        c3.getType() == c4.getType() &&
-                        c1.getType() != YinYangType.UNKNOWN) {
+                YinYangCell[] cells = {
+                        board.getCell(x, y), board.getCell(x + 1, y),
+                        board.getCell(x, y + 1), board.getCell(x + 1, y + 1)
+                };
+                if (Arrays.stream(cells).map(YinYangCell::getType).distinct().count() == 1 &&
+                        cells[0].getType() != YinYangType.UNKNOWN) {
                     return false;
                 }
             }
@@ -37,10 +34,8 @@ public class YinYangUtilities {
      * @return true if all groups are connected, false otherwise
      */
     public static boolean validateConnectivity(YinYangBoard board) {
-        Set<YinYangCell> whiteCells = getCellsByType(board, YinYangType.WHITE);
-        Set<YinYangCell> blackCells = getCellsByType(board, YinYangType.BLACK);
-
-        return isConnected(whiteCells, board) && isConnected(blackCells, board);
+        return isConnected(getCellsByType(board, YinYangType.WHITE), board) &&
+                isConnected(getCellsByType(board, YinYangType.BLACK), board);
     }
 
     /**
@@ -70,10 +65,8 @@ public class YinYangUtilities {
      */
     private static boolean isConnected(Set<YinYangCell> cells, YinYangBoard board) {
         if (cells.isEmpty()) return true;
-
         Set<YinYangCell> visited = new HashSet<>();
         dfs(cells.iterator().next(), cells, visited, board);
-
         return visited.size() == cells.size();
     }
 
@@ -86,20 +79,12 @@ public class YinYangUtilities {
      * @param board The board to traverse
      */
     private static void dfs(YinYangCell cell, Set<YinYangCell> cells, Set<YinYangCell> visited, YinYangBoard board) {
-        if (!cells.contains(cell) || visited.contains(cell)) return;
-
-        visited.add(cell);
-
-        int x = cell.getX();
-        int y = cell.getY();
-
+        if (!cells.contains(cell) || !visited.add(cell)) return;
+        int x = cell.getX(), y = cell.getY();
         YinYangCell[] neighbors = {
-                board.getCell(x - 1, y),
-                board.getCell(x + 1, y),
-                board.getCell(x, y - 1),
-                board.getCell(x, y + 1)
+                board.getCell(x - 1, y), board.getCell(x + 1, y),
+                board.getCell(x, y - 1), board.getCell(x, y + 1)
         };
-
         for (YinYangCell neighbor : neighbors) {
             if (neighbor != null) {
                 dfs(neighbor, cells, visited, board);
@@ -115,8 +100,7 @@ public class YinYangUtilities {
     public static void debugPrintBoard(YinYangBoard board) {
         for (int y = 0; y < board.getHeight(); y++) {
             for (int x = 0; x < board.getWidth(); x++) {
-                YinYangCell cell = board.getCell(x, y);
-                System.out.print(cell.getType().toString().charAt(0) + " ");
+                System.out.print(board.getCell(x, y).getType().toString().charAt(0) + " ");
             }
             System.out.println();
         }
