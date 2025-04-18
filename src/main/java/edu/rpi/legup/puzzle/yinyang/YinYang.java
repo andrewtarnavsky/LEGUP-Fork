@@ -2,6 +2,14 @@ package edu.rpi.legup.puzzle.yinyang;
 
 import edu.rpi.legup.model.Puzzle;
 import edu.rpi.legup.model.gameboard.Board;
+import edu.rpi.legup.puzzle.yinyang.rules.*;
+import edu.rpi.legup.puzzle.yinyang.rules.BlackOrWhiteCaseRule;
+import edu.rpi.legup.puzzle.yinyang.rules.Prevent2x2BlockCaseRule;
+import edu.rpi.legup.puzzle.yinyang.rules.BlackConnectivityCaseRule;
+import edu.rpi.legup.puzzle.yinyang.rules.WhiteConnectivityCaseRule;
+import edu.rpi.legup.puzzle.yinyang.rules.EdgeIsolationCaseRule;
+
+
 
 public class YinYang extends Puzzle {
 
@@ -60,5 +68,14 @@ public class YinYang extends Puzzle {
         if (!YinYangUtilities.validateConnectivity(yinYangBoard)) {
             System.out.println("Warning: Board contains disconnected groups.");
         }
+    }
+
+    @Override
+    public void initializeCaseRules() {
+        caseRules.add(new BlackOrWhiteCaseRule());
+        caseRules.add(new Prevent2x2BlockCaseRule());
+        caseRules.add(new BlackConnectivityCaseRule());
+        caseRules.add(new WhiteConnectivityCaseRule());
+        caseRules.add(new EdgeIsolationCaseRule());
     }
 }

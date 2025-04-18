@@ -1,10 +1,13 @@
-package edu.rpi.legup.puzzle.yinyang;
+package edu.rpi.legup.puzzle.yinyang.rules;
 
 import edu.rpi.legup.model.gameboard.Board;
 import edu.rpi.legup.model.gameboard.CaseBoard;
 import edu.rpi.legup.model.gameboard.PuzzleElement;
 import edu.rpi.legup.model.rules.CaseRule;
 import edu.rpi.legup.model.tree.TreeTransition;
+import edu.rpi.legup.puzzle.yinyang.YinYangBoard;
+import edu.rpi.legup.puzzle.yinyang.YinYangCell;
+import edu.rpi.legup.puzzle.yinyang.YinYangType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,5 +109,9 @@ public class BlackConnectivityCaseRule extends CaseRule {
         }
 
         return false;
+    }
+
+    public boolean isValidDimensions(int rows, int columns) {
+        return rows >= 2 && columns >= 2 && rows == columns;
     }
 }

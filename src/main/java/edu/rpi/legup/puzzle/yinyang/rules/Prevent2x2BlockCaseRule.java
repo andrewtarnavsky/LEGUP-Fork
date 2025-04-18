@@ -1,21 +1,25 @@
-package edu.rpi.legup.puzzle.yinyang;
+package edu.rpi.legup.puzzle.yinyang.rules;
 
 import edu.rpi.legup.model.gameboard.Board;
 import edu.rpi.legup.model.gameboard.CaseBoard;
 import edu.rpi.legup.model.gameboard.PuzzleElement;
 import edu.rpi.legup.model.rules.CaseRule;
 import edu.rpi.legup.model.tree.TreeTransition;
+import edu.rpi.legup.puzzle.yinyang.YinYangBoard;
+import edu.rpi.legup.puzzle.yinyang.YinYangCell;
+import edu.rpi.legup.puzzle.yinyang.YinYangType;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class WhiteConnectivityCaseRule extends CaseRule {
+public class Prevent2x2BlockCaseRule extends CaseRule {
 
-    public WhiteConnectivityCaseRule() {
+    public Prevent2x2BlockCaseRule() {
         super(
-                "whiteconnect",
-                "White Group Connection",
-                "An unknown cell near white may or may not be part of the white group.",
-                "edu/rpi/legup/images/yinyang/cases/WhiteConnect.png"
+                "prevent2x2",
+                "Prevent 2x2 Block",
+                "If coloring a cell could create a 2x2 block of one color, split the possibilities.",
+                "edu/rpi/legup/images/yinyang/cases/Prevent2x2.png"
         );
     }
 
@@ -33,12 +37,12 @@ public class WhiteConnectivityCaseRule extends CaseRule {
             return getInvalidUseOfRuleMessage() + ": Both cases must modify the same cell.";
         }
 
-        YinYangType t1 = mod1.getType();
-        YinYangType t2 = mod2.getType();
+        YinYangType type1 = mod1.getType();
+        YinYangType type2 = mod2.getType();
 
-        if (!((t1 == YinYangType.WHITE && t2 == YinYangType.BLACK) ||
-                (t1 == YinYangType.BLACK && t2 == YinYangType.WHITE))) {
-            return getInvalidUseOfRuleMessage() + ": Cell must be white in one case and black in the other.";
+        if (!((type1 == YinYangType.WHITE && type2 == YinYangType.BLACK) ||
+                (type1 == YinYangType.BLACK && type2 == YinYangType.WHITE))) {
+            return getInvalidUseOfRuleMessage() + ": The cell must be black in one case and white in the other.";
         }
 
         return null;
@@ -52,7 +56,8 @@ public class WhiteConnectivityCaseRule extends CaseRule {
 
         for (PuzzleElement element : yinYangBoard.getPuzzleElements()) {
             YinYangCell cell = (YinYangCell) element;
-            if (cell.getType() == YinYangType.UNKNOWN && isAdjacentToWhite(cell, yinYangBoard)) {
+            if (cell.getType() == YinYangType.UNKNOWN &&
+                    couldComplete2x2(cell, yinYangBoard)) {
                 caseBoard.addPickableElement(cell);
             }
         }
@@ -87,20 +92,29 @@ public class WhiteConnectivityCaseRule extends CaseRule {
         return null;
     }
 
-    private boolean isAdjacentToWhite(YinYangCell cell, YinYangBoard board) {
+    /**
+     * Checks whether assigning a color to this cell could potentially complete a 2x2 block.
+     */
+    private boolean couldComplete2x2(YinYangCell cell, YinYangBoard board) {
         int x = cell.getX();
         int y = cell.getY();
 
-        YinYangCell[] neighbors = new YinYangCell[]{
-                board.getCell(x - 1, y),
-                board.getCell(x + 1, y),
-                board.getCell(x, y - 1),
-                board.getCell(x, y + 1)
+        YinYangCell[][] neighbors = new YinYangCell[][]{
+                {board.getCell(x - 1, y), board.getCell(x - 1, y - 1), board.getCell(x, y - 1)},
+                {board.getCell(x + 1, y), board.getCell(x + 1, y - 1), board.getCell(x, y - 1)},
+                {board.getCell(x + 1, y), board.getCell(x + 1, y + 1), board.getCell(x, y + 1)},
+                {board.getCell(x - 1, y), board.getCell(x - 1, y + 1), board.getCell(x, y + 1)},
         };
 
-        for (YinYangCell neighbor : neighbors) {
-            if (neighbor != null && neighbor.getType() == YinYangType.WHITE) {
-                return true;
+        for (YinYangCell[] trio : neighbors) {
+            if (trio[0] != null && trio[1] != null && trio[2] != null) {
+                YinYangType t1 = trio[0].getType();
+                YinYangType t2 = trio[1].getType();
+                YinYangType t3 = trio[2].getType();
+
+                if (t1 == t2 && t2 == t3 && t1 != YinYangType.UNKNOWN) {
+                    return true;
+                }
             }
         }
 

@@ -678,4 +678,6 @@ public abstract class Puzzle implements IBoardSubject, ITreeSubject {
     public boolean checkValidity() {
         return true;
     }
+
+    public abstract void initializeCaseRules();
 }
