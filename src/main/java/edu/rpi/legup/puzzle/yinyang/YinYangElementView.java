@@ -6,9 +6,7 @@ import java.awt.*;
 
 public class YinYangElementView extends GridElementView {
 
-    private static final Color WHITE_COLOR = Color.WHITE;
-    private static final Color BLACK_COLOR = Color.BLACK;
-    private static final Color UNKNOWN_COLOR = Color.LIGHT_GRAY;
+    private static final boolean DEBUG_MODE = true; // Toggle this off to hide outlines
 
     public YinYangElementView(YinYangCell cell) {
         super(cell);
@@ -20,30 +18,33 @@ public class YinYangElementView extends GridElementView {
     }
 
     @Override
-    public void drawElement(Graphics2D graphics2D) {
-        YinYangCell cell = getPuzzleElement();
+    public void drawElement(Graphics2D g2d) {
+        YinYangCell cell = (YinYangCell) puzzleElement;
         YinYangType type = cell.getType();
 
-        graphics2D.setStroke(new BasicStroke(1));
+        // Base fill
+        g2d.setStroke(new BasicStroke(1));
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(location.x, location.y, size.width, size.height);
+        g2d.setColor(Color.BLACK);
+        g2d.drawRect(location.x, location.y, size.width, size.height);
 
-        switch (type) {
-            case WHITE:
-                graphics2D.setColor(WHITE_COLOR);
-                graphics2D.fillOval(location.x, location.y, size.width, size.height);
-                break;
+        // Fill circle
+        if (type == YinYangType.BLACK || type == YinYangType.WHITE) {
+            g2d.setColor(type == YinYangType.BLACK ? Color.BLACK : Color.WHITE);
+            int cx = location.x + size.width / 2;
+            int cy = location.y + size.height / 2;
+            int radius = Math.min(size.width, size.height) / 2 - 4;
+            g2d.fillOval(cx - radius, cy - radius, radius * 2, radius * 2);
+            g2d.setColor(Color.BLACK);
+            g2d.drawOval(cx - radius, cy - radius, radius * 2, radius * 2);
+        }
 
-            case BLACK:
-                graphics2D.setColor(BLACK_COLOR);
-                graphics2D.fillOval(location.x, location.y, size.width, size.height);
-                break;
-
-            case UNKNOWN:
-            default:
-                graphics2D.setColor(UNKNOWN_COLOR);
-                graphics2D.fillOval(location.x, location.y, size.width, size.height);
-                graphics2D.setColor(Color.BLACK);
-                graphics2D.drawOval(location.x, location.y, size.width, size.height);
-                break;
+        // Optional debug overlay — outline cells in distinct colors
+        if (DEBUG_MODE) {
+            g2d.setColor(type == YinYangType.BLACK ? Color.RED : type == YinYangType.WHITE ? Color.BLUE : Color.GRAY);
+            g2d.setStroke(new BasicStroke(2));
+            g2d.drawRect(location.x + 2, location.y + 2, size.width - 4, size.height - 4);
         }
     }
 }
