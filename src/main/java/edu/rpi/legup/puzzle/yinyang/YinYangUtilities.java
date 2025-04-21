@@ -105,4 +105,28 @@ public class YinYangUtilities {
             System.out.println();
         }
     }
+
+    /**
+     * Returns a list of coordinates for cells that can be safely set to black or white
+     * without violating 2x2 or disconnection rules.
+     */
+    public static List<YinYangCell> getHintableCells(YinYangBoard board) {
+        List<YinYangCell> hintable = new ArrayList<>();
+
+        for (YinYangCell cell : board.getPuzzleElements().stream().map(e -> (YinYangCell)e).toList()) {
+            if (cell.getType() != YinYangType.UNKNOWN) continue;
+
+            for (YinYangType tryType : new YinYangType[] {YinYangType.WHITE, YinYangType.BLACK}) {
+                cell.setType(tryType);
+                boolean valid = validateNo2x2Blocks(board);  // Only enforce no 2x2 for hints
+                cell.setType(YinYangType.UNKNOWN);
+                if (valid) {
+                    hintable.add(cell);
+                    break;
+                }
+            }
+        }
+
+        return hintable;
+    }
 }
