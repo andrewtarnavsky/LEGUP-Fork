@@ -4,22 +4,21 @@ import edu.rpi.legup.controller.BoardController;
 import edu.rpi.legup.model.gameboard.PuzzleElement;
 import edu.rpi.legup.ui.boardview.GridBoardView;
 
-import java.awt.*;
+import java.awt.Point;
 
 public class YinYangView extends GridBoardView {
 
     public YinYangView(YinYangBoard board) {
         super(new BoardController(), new YinYangController(), board.getDimension());
-
-        for (PuzzleElement puzzleElement : board.getPuzzleElements()) {
-            YinYangCell cell = (YinYangCell) puzzleElement;
+        // Create and position a view for each cell on the board
+        for (PuzzleElement element : board.getPuzzleElements()) {
+            YinYangCell cell = (YinYangCell) element;
             Point loc = cell.getLocation();
             YinYangElementView elementView = new YinYangElementView(cell);
             elementView.setIndex(cell.getIndex());
             elementView.setSize(elementSize);
-            elementView.setLocation(
-                    new Point(loc.x * elementSize.width, loc.y * elementSize.height));
-            elementViews.add(elementView);
+            elementView.setLocation(new Point(loc.x * elementSize.width, loc.y * elementSize.height));
+            this.elementViews.add(elementView);
         }
     }
 }
