@@ -14,18 +14,26 @@ public class YinYangExporter extends PuzzleExporter {
     @Override
     protected Element createBoardElement(Document document) {
         YinYangBoard board;
-        // Determine the source of the current board state
         if (puzzle.getTree() != null) {
             board = (YinYangBoard) puzzle.getTree().getRootNode().getBoard();
         } else {
             board = (YinYangBoard) puzzle.getBoardView().getBoard();
         }
 
+        // Validation: ensure puzzle has at least one white and one black clue
+        if (board.getCellsByType(YinYangType.WHITE).isEmpty()
+                || board.getCellsByType(YinYangType.BLACK).isEmpty()) {
+            throw new IllegalStateException("Cannot save YinYang puzzle: each color must have at least one clue.");
+        }
+        // Validation: ensure no 2x2 area is filled with the same color
+        if (!YinYangUtilities.validateNo2x2Blocks(board)) {
+            throw new IllegalStateException("Cannot save YinYang puzzle: invalid 2x2 same-color block detected.");
+        }
+
         Element boardElement = document.createElement("board");
         boardElement.setAttribute("width", String.valueOf(board.getWidth()));
         boardElement.setAttribute("height", String.valueOf(board.getHeight()));
 
-        // Export each cell in row-major order for consistency
         Element cellsElement = document.createElement("cells");
         for (int y = 0; y < board.getHeight(); y++) {
             for (int x = 0; x < board.getWidth(); x++) {
