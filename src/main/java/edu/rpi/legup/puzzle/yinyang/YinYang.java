@@ -9,6 +9,7 @@ import edu.rpi.legup.puzzle.yinyang.rules.Prevent2x2BlockCaseRule;
 import edu.rpi.legup.puzzle.yinyang.rules.BlackConnectivityCaseRule;
 import edu.rpi.legup.puzzle.yinyang.rules.WhiteConnectivityCaseRule;
 import edu.rpi.legup.puzzle.yinyang.rules.EdgeIsolationCaseRule;
+import edu.rpi.legup.puzzle.yinyang.rules.AdjacentConflictCaseRule;
 
 
 public class YinYang extends Puzzle {
@@ -38,6 +39,7 @@ public class YinYang extends Puzzle {
         caseRules.add(new BlackConnectivityCaseRule());
         caseRules.add(new WhiteConnectivityCaseRule());
         caseRules.add(new EdgeIsolationCaseRule());
+        caseRules.add(new AdjacentConflictCaseRule());
     }
 
     /** Records the current board state for undo history. */
