@@ -4,6 +4,12 @@ import edu.rpi.legup.model.Puzzle;
 import edu.rpi.legup.model.gameboard.Board;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import edu.rpi.legup.puzzle.yinyang.rules.BlackOrWhiteCaseRule;
+import edu.rpi.legup.puzzle.yinyang.rules.Prevent2x2BlockCaseRule;
+import edu.rpi.legup.puzzle.yinyang.rules.BlackConnectivityCaseRule;
+import edu.rpi.legup.puzzle.yinyang.rules.WhiteConnectivityCaseRule;
+import edu.rpi.legup.puzzle.yinyang.rules.EdgeIsolationCaseRule;
+
 
 public class YinYang extends Puzzle {
     private Deque<Board> undoStack = new ArrayDeque<>();
@@ -22,6 +28,16 @@ public class YinYang extends Puzzle {
         boardView = new YinYangView((YinYangBoard) currentBoard, this);
         boardView.setBoard(currentBoard);
         addBoardListener(boardView);
+    }
+
+    @Override
+    public void initializeCaseRules() {
+        // Register all case rules here (empty for now or add later)
+        caseRules.add(new BlackOrWhiteCaseRule());
+        caseRules.add(new Prevent2x2BlockCaseRule());
+        caseRules.add(new BlackConnectivityCaseRule());
+        caseRules.add(new WhiteConnectivityCaseRule());
+        caseRules.add(new EdgeIsolationCaseRule());
     }
 
     /** Records the current board state for undo history. */
@@ -71,7 +87,12 @@ public class YinYang extends Puzzle {
     @Override
     public boolean isBoardComplete(Board board) {
         YinYangBoard yinYangBoard = (YinYangBoard) board;
-        // Puzzle complete only if no cells remain unknown and rules are satisfied
+        // Puzzle is complete only if each color is present at least once
+        if (yinYangBoard.getCellsByType(YinYangType.WHITE).isEmpty()
+                || yinYangBoard.getCellsByType(YinYangType.BLACK).isEmpty()) {
+            return false;
+        }
+        // All cells must be filled and all rules satisfied
         if (yinYangBoard.getPuzzleElements().stream()
                 .map(e -> (YinYangCell) e)
                 .anyMatch(cell -> cell.getType() == YinYangType.UNKNOWN)) {
@@ -84,10 +105,12 @@ public class YinYang extends Puzzle {
     @Override
     public void onBoardChange(Board board) {
         YinYangBoard yinYangBoard = (YinYangBoard) board;
+        // Always warn about immediate 2x2 rule violations
         if (!YinYangUtilities.validateNo2x2Blocks(yinYangBoard)) {
             System.out.println("Warning: Board contains invalid 2x2 blocks.");
         }
-        if (!YinYangUtilities.validateConnectivity(yinYangBoard)) {
+        // Only warn about connectivity issues in solving mode (ignore during editing)
+        if (this.getTree() != null && !YinYangUtilities.validateConnectivity(yinYangBoard)) {
             System.out.println("Warning: Board contains disconnected groups.");
         }
     }

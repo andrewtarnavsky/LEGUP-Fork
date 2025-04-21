@@ -56,13 +56,20 @@ public class YinYangController extends ElementController {
         }
     }
 
-    /** Checks if setting a cell to a specific type is valid according to game rules. */
-    private boolean canSetType(YinYangBoard board, YinYangCell cell, YinYangType type) {
-        YinYangType originalType = cell.getType();
-        cell.setType(type);
-        boolean isValid = YinYangUtilities.validateNo2x2Blocks(board) &&
-                YinYangUtilities.validateConnectivity(board);
-        cell.setType(originalType);
-        return isValid;
+    /** Checks if a proposed cell type change is valid given current rules/state. */
+    private boolean canSetType(YinYangBoard board, YinYangCell cell, YinYangType newType) {
+        YinYangType original = cell.getType();
+        cell.setType(newType);
+        boolean no2x2 = YinYangUtilities.validateNo2x2Blocks(board);
+        boolean connectivity = YinYangUtilities.validateConnectivity(board);
+        cell.setType(original);
+        if (!no2x2) {
+            return false;
+        }
+        // Allow disconnected groups if the board is not fully filled yet
+        if (!connectivity && board.getCellsByType(YinYangType.UNKNOWN).isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }
