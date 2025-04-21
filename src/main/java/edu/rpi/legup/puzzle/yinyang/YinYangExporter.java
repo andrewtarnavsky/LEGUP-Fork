@@ -14,8 +14,7 @@ public class YinYangExporter extends PuzzleExporter {
     @Override
     protected Element createBoardElement(Document document) {
         YinYangBoard board;
-
-        // Check whether the tree or the board view should be used
+        // Determine the source of the current board state
         if (puzzle.getTree() != null) {
             board = (YinYangBoard) puzzle.getTree().getRootNode().getBoard();
         } else {
@@ -26,18 +25,17 @@ public class YinYangExporter extends PuzzleExporter {
         boardElement.setAttribute("width", String.valueOf(board.getWidth()));
         boardElement.setAttribute("height", String.valueOf(board.getHeight()));
 
-        // Create the cells element
+        // Export each cell in row-major order for consistency
         Element cellsElement = document.createElement("cells");
-        for (PuzzleElement element : board.getPuzzleElements()) {
-            YinYangCell cell = (YinYangCell) element;
-
-            // Only export cells that are valid and initialized
-            if (cell.getType() != YinYangType.UNKNOWN) {
-                Element cellElement = puzzle.getFactory().exportCell(document, cell);
-                cellsElement.appendChild(cellElement);
+        for (int y = 0; y < board.getHeight(); y++) {
+            for (int x = 0; x < board.getWidth(); x++) {
+                YinYangCell cell = board.getCell(x, y);
+                if (cell != null && cell.getType() != YinYangType.UNKNOWN) {
+                    Element cellElement = puzzle.getFactory().exportCell(document, cell);
+                    cellsElement.appendChild(cellElement);
+                }
             }
         }
-
         boardElement.appendChild(cellsElement);
         return boardElement;
     }
