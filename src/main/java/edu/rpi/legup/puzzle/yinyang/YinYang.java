@@ -106,14 +106,21 @@ public class YinYang extends Puzzle {
 
     @Override
     public void onBoardChange(Board board) {
-        YinYangBoard yinYangBoard = (YinYangBoard) board;
-        // Always warn about immediate 2x2 rule violations
-        if (!YinYangUtilities.validateNo2x2Blocks(yinYangBoard)) {
-            System.out.println("Warning: Board contains invalid 2x2 blocks.");
+        YinYangBoard yyBoard = (YinYangBoard) board;
+
+        boolean has2x2 = !YinYangUtilities.validateNo2x2Blocks(yyBoard);
+        boolean disconnected = !YinYangUtilities.validateConnectivity(yyBoard);
+        boolean missingColor = yyBoard.getCellsByType(YinYangType.WHITE).isEmpty()
+                || yyBoard.getCellsByType(YinYangType.BLACK).isEmpty();
+
+        if (has2x2) {
+            System.out.println("[Violation] Board contains an illegal 2x2 block of same color.");
         }
-        // Only warn about connectivity issues in solving mode (ignore during editing)
-        if (this.getTree() != null && !YinYangUtilities.validateConnectivity(yinYangBoard)) {
-            System.out.println("Warning: Board contains disconnected groups.");
+        if (disconnected) {
+            System.out.println("[Violation] Board has disconnected color regions.");
+        }
+        if (missingColor) {
+            System.out.println("[Notice] Board has no white or no black cells placed.");
         }
     }
 }
