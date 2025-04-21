@@ -8,9 +8,9 @@ import java.awt.Point;
 
 public class YinYangView extends GridBoardView {
 
-    public YinYangView(YinYangBoard board) {
-        super(new BoardController(), new YinYangController(), board.getDimension());
-        // Create and position a view for each cell on the board
+    public YinYangView(YinYangBoard board, YinYang puzzle) {
+        super(new BoardController(), new YinYangController(puzzle), board.getDimension());
+        // Instantiate a view for each cell in the board
         for (PuzzleElement element : board.getPuzzleElements()) {
             YinYangCell cell = (YinYangCell) element;
             Point loc = cell.getLocation();
